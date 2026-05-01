@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Наш квест</title>
+  <link rel="stylesheet" href="styles-3-3-3.css" />
+</head>
+<body>
+  <div class="bg-layer">
+    <div class="bg-gradient"></div>
+    <div class="bg-orbit bg-orbit-1"></div>
+    <div class="bg-orbit bg-orbit-2"></div>
+    <div class="bg-orbit bg-orbit-3"></div>
+    <div class="bg-particles" id="bgParticles"></div>
+  </div>
+
+  <div class="app">
+    <header class="app-header">
+      <h1>Наш маленький квест</h1>
+      <p class="subtitle">Проходи уровни один за другим, не торопясь и с улыбкой ❤</p>
+      <button id="resetProgress" class="reset-btn">Сбросить прогресс</button>
+    </header>
+
+    <main>
+      <section class="levels-grid" id="levelsGrid"></section>
+
+      <section class="level-panel hidden" id="levelPanel">
+        <button class="back-btn" id="backToLevels">← К списку уровней</button>
+        <h2 id="levelTitle"></h2>
+        <p id="levelDescription" class="level-description"></p>
+
+        <div id="levelContent"></div>
+
+        <form id="answerForm" class="answer-form">
+          <label for="answerInput" id="answerLabel">Твой ответ:</label>
+          <input id="answerInput" type="text" autocomplete="off" />
+          <button type="submit" class="primary-btn">Проверить</button>
+        </form>
+
+        <p id="feedback" class="feedback"></p>
+        <div id="reward" class="reward"></div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Сделано с любовью специально для тебя 💖</p>
+    </footer>
+  </div>
+
+  <div id="loveOverlay" class="love-overlay hidden">
+    <div class="love-overlay-inner">
+      <div class="big-heart">❤</div>
+      <p class="love-text">Я тебя тоже люблю</p>
+    </div>
+  </div>
+
+  <script src="script-2-2-2.js"></script>
+</body>
+</html>

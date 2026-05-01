@@ -1,0 +1,564 @@
+/* =============================================
+   LOVE QUEST — ИСПРАВЛЕННЫЙ CSS
+   Правки: overflow scroll, мобильная адаптация
+   ============================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+  /* убираем overflow: hidden — он блокировал скролл */
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  /* ФИКС: убрали overflow:hidden, добавили overflow-x:hidden чтобы не было горизонтальной прокрутки */
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;   /* ФИКС: было stretch — не давало расти по высоте */
+  justify-content: center;
+  background: #050816;
+  color: #fef7ff;
+}
+
+/* =============================================
+   АНИМИРОВАННЫЙ ФОН
+   ============================================= */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg-gradient {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 10% 0%, #ff9a9e 0, transparent 60%),
+    radial-gradient(circle at 90% 10%, #fad0c4 0, transparent 55%),
+    radial-gradient(circle at 0% 100%, #a18cd1 0, transparent 50%),
+    radial-gradient(circle at 100% 100%, #fbc2eb 0, transparent 55%);
+  filter: blur(4px);
+  animation: gradient-move 32s ease-in-out infinite alternate;
+}
+
+@keyframes gradient-move {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(0, -40px, 0) scale(1.05); }
+  100% { transform: translate3d(0, 20px, 0) scale(1.02); }
+}
+
+.bg-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 0 30px rgba(255,255,255,0.06);
+  animation: orbit-spin 40s linear infinite;
+}
+.bg-orbit-1 { width: 520px; height: 520px; top: -120px; right: -80px; }
+.bg-orbit-2 { width: 420px; height: 420px; bottom: -140px; left: -140px; animation-duration: 55s; }
+.bg-orbit-3 { width: 260px; height: 260px; top: 50%; left: -60px; animation-duration: 70s; }
+
+@keyframes orbit-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.bg-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle-heart {
+  position: absolute;
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  animation: float-heart 10s linear infinite;
+}
+
+@keyframes float-heart {
+  0%   { transform: translate3d(0, 0, 0) scale(0.7); opacity: 0; }
+  10%  { opacity: 0.8; }
+  80%  { opacity: 0.9; }
+  100% { transform: translate3d(0, -120px, 0) scale(1.3); opacity: 0; }
+}
+
+/* =============================================
+   ОСНОВНОЙ КОНТЕЙНЕР
+   ============================================= */
+.app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 980px;
+  margin: 28px auto;          /* ФИКС: auto по горизонтали вместо просто 28px */
+  padding: 24px 24px 32px;    /* ФИКС: увеличили нижний паддинг */
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.12), rgba(7,3,23,0.9));
+  border-radius: 26px;
+  box-shadow: 0 26px 72px rgba(0,0,0,0.75);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.22);
+  /* ФИКС: убрали overflow:hidden — он обрезал контент */
+  overflow: visible;
+}
+
+.app::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% -10%, rgba(255,255,255,0.25), transparent 65%);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  pointer-events: none;
+  border-radius: 26px;
+}
+
+/* =============================================
+   ШАПКА
+   ============================================= */
+.app-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 20px;
+  z-index: 1;
+}
+
+.app-header h1 {
+  font-size: clamp(1.4rem, 4vw, 2.1rem);  /* ФИКС: fluid размер для телефона */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  text-shadow: 0 0 20px rgba(255,186,213,0.7);
+  word-break: break-word;                  /* ФИКС: не уходит за экран */
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #f3d9ff;
+  opacity: 0.92;
+}
+
+/* =============================================
+   КНОПКА СБРОСА
+   ============================================= */
+.reset-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  background: rgba(9,5,36,0.9);
+  color: #ffb3d6;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  transition: background 0.15s ease;
+  white-space: nowrap;   /* ФИКС: текст не переносится */
+}
+.reset-btn:hover { background: rgba(19,11,62,0.96); }
+
+/* =============================================
+   СЕТКА УРОВНЕЙ
+   ============================================= */
+.levels-grid {
+  position: relative;
+  display: grid;
+  /* ФИКС: на маленьких экранах — 2 колонки, не меньше 140px */
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+  z-index: 1;
+}
+
+.level-card {
+  position: relative;
+  padding: 14px 12px;
+  border-radius: 18px;
+  background: radial-gradient(circle at top, rgba(255,255,255,0.22), rgba(120,74,167,0.7));
+  box-shadow: 0 18px 36px rgba(0,0,0,0.5);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  border: 1px solid rgba(255,255,255,0.1);
+  /* ФИКС: минимальная высота чтобы карточки не сплющивались */
+  min-height: 90px;
+}
+
+.level-card::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(from 180deg at 50% 50%,
+    rgba(255,255,255,0.2),
+    rgba(255,189,214,0.18),
+    rgba(161,140,209,0.19),
+    rgba(255,255,255,0.22));
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+.level-card:hover::before { opacity: 0.7; transform: translate3d(0,0,0); }
+.level-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.7);
+}
+.level-card.locked {
+  opacity: 0.4;
+  cursor: default;
+  filter: grayscale(0.4);
+}
+
+.level-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.level-number {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.level-status {
+  font-size: 0.75rem;
+  margin-bottom: 5px;
+}
+
+.level-preview {
+  font-size: 0.8rem;
+  color: #efe1ff;
+  opacity: 0.96;
+  word-break: break-word;  /* ФИКС: длинные слова не выходят за карточку */
+}
+
+/* =============================================
+   БЕЙДЖИ
+   ============================================= */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  background: rgba(7,3,23,0.7);
+  box-shadow: 0 0 16px rgba(0,0,0,0.35);
+}
+.badge-unlocked { color: #7ef5c6; }
+.badge-locked   { color: #f5c4ff; }
+.badge-done     { color: #ffb3d6; }
+
+/* =============================================
+   ПАНЕЛЬ УРОВНЯ
+   ============================================= */
+.level-panel {
+  position: relative;
+  margin-top: 22px;
+  padding: 18px 16px 20px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(12,7,40,0.96), rgba(46,21,72,0.96));
+  box-shadow: 0 22px 52px rgba(0,0,0,0.75);
+  animation: slide-up 0.25s ease-out;
+  border: 1px solid rgba(255,255,255,0.18);
+  z-index: 1;
+  /* ФИКС: не обрезает содержимое */
+  overflow: visible;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hidden { display: none !important; }
+
+.back-btn {
+  border: none;
+  background: transparent;
+  color: #f2dfff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+.back-btn:hover { opacity: 1; }
+
+.level-panel h2 {
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  margin-bottom: 8px;
+}
+
+.level-description {
+  font-size: 0.95rem;
+  color: #f4e4ff;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.level-instruction {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+.level-instruction p { margin-bottom: 8px; }
+
+/* =============================================
+   ФОРМА ОТВЕТА
+   ============================================= */
+.answer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.answer-form label {
+  font-size: 0.85rem;
+  color: #f4d9ff;
+}
+
+.answer-form input {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.26);
+  padding: 11px 16px;
+  font-size: 1rem;      /* ФИКС: минимум 16px — iOS не зумит поле */
+  outline: none;
+  background: rgba(9,5,36,0.85);
+  color: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  /* ФИКС: не выходит за пределы родителя */
+  width: 100%;
+  max-width: 100%;
+}
+.answer-form input:focus {
+  border-color: #ffb3d6;
+  box-shadow: 0 0 0 2px rgba(255,179,214,0.35);
+  background: rgba(15,9,54,0.96);
+}
+
+/* =============================================
+   КНОПКИ
+   ============================================= */
+.primary-btn {
+  align-self: flex-start;
+  border-radius: 999px;
+  border: none;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #ff8bb0, #f07ed2);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 12px 28px rgba(230,91,150,0.6);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  /* ФИКС: на телефоне — растягиваем на всю ширину */
+}
+.primary-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(230,91,150,0.8);
+}
+.primary-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 10px 24px rgba(230,91,150,0.55);
+}
+
+/* =============================================
+   ФИДБЕК И НАГРАДА
+   ============================================= */
+.feedback {
+  min-height: 22px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.feedback.ok    { color: #7ef5c6; }
+.feedback.error { color: #ff9fb5; }
+
+.reward {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(10,6,38,0.92);
+  font-size: 0.9rem;
+  color: #f4e4ff;
+  border: 1px solid rgba(255,255,255,0.08);
+  line-height: 1.6;
+  word-break: break-word;  /* ФИКС: длинные строки не уходят за экран */
+}
+.reward img {
+  max-width: 100%;
+  border-radius: 14px;
+  margin-top: 8px;
+  height: auto;
+}
+
+.final-test { margin-top: 10px; }
+.final-test ul {
+  margin-left: 18px;
+  margin-top: 8px;
+}
+.final-test li { margin-bottom: 6px; line-height: 1.5; }
+
+/* =============================================
+   ФУТЕР
+   ============================================= */
+.app-footer {
+  position: relative;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #e1c9ff;
+  margin-top: 16px;
+  z-index: 1;
+}
+
+/* =============================================
+   ОВЕРЛЕЙ СЕРДЕЧКА
+   ============================================= */
+.love-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(10,0,20,0.96), rgba(0,0,0,0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.love-overlay-inner {
+  text-align: center;
+  animation: pop-in 0.5s ease-out;
+  padding: 0 20px;  /* ФИКС: отступы на телефоне */
+}
+
+.big-heart {
+  font-size: clamp(70px, 25vw, 120px);  /* ФИКС: fluid размер */
+  animation: heartbeat 1.4s ease-in-out infinite;
+  text-shadow: 0 0 30px rgba(255,105,180,0.9);
+}
+
+.love-text {
+  margin-top: 12px;
+  font-size: clamp(1rem, 4vw, 1.3rem);  /* ФИКС: fluid */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes heartbeat {
+  0%   { transform: scale(0.95); }
+  25%  { transform: scale(1.1); }
+  40%  { transform: scale(0.98); }
+  60%  { transform: scale(1.06); }
+  100% { transform: scale(0.95); }
+}
+
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.6) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* =============================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ — 600px и меньше
+   ============================================= */
+@media (max-width: 600px) {
+  body {
+    align-items: flex-start;
+  }
+
+  .app {
+    margin: 10px;          /* меньше отступ по бокам */
+    padding: 16px 14px 24px;
+    border-radius: 18px;
+  }
+
+  .app-header h1 {
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+  }
+
+  .reset-btn {
+    /* на маленьком экране — перемещаем под заголовок чтобы не лезло */
+    position: static;
+    display: block;
+    margin: 8px auto 0;
+    text-align: center;
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(2, 1fr);  /* строго 2 колонки на телефоне */
+    gap: 10px;
+  }
+
+  .level-card {
+    padding: 12px 10px;
+    border-radius: 14px;
+    min-height: 80px;
+  }
+
+  .level-number { font-size: 1rem; }
+  .level-status { font-size: 0.7rem; }
+  .level-preview { font-size: 0.75rem; }
+
+  .level-panel {
+    margin-top: 16px;
+    padding: 14px 12px 18px;
+    border-radius: 16px;
+  }
+
+  .level-panel h2 { font-size: 1.1rem; }
+  .level-description { font-size: 0.88rem; }
+  .level-instruction { font-size: 0.88rem; }
+
+  .answer-form input {
+    font-size: 1rem;   /* iOS не зумит при 16px+ */
+    padding: 12px 14px;
+  }
+
+  .primary-btn {
+    align-self: stretch;     /* кнопка на всю ширину */
+    text-align: center;
+    padding: 13px 20px;
+  }
+
+  .reward {
+    font-size: 0.85rem;
+  }
+}
+
+/* =============================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ — 380px и меньше (старые телефоны)
+   ============================================= */
+@media (max-width: 380px) {
+  .app {
+    margin: 6px;
+    padding: 14px 10px 20px;
+    border-radius: 14px;
+  }
+
+  .app-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .level-card {
+    padding: 10px 8px;
+    min-height: 72px;
+  }
+}
